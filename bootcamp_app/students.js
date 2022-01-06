@@ -21,11 +21,12 @@ pool
 const command = `SELECT students.id as id, students.name as name, cohorts.name as cohort
 FROM students
 JOIN cohorts ON cohorts.id = students.cohort_id
-WHERE cohorts.name LIKE '%${args[0]}%'
-LIMIT ${args[1]};`;
+WHERE cohorts.name LIKE $1
+LIMIT $2;`;
 
+const values = [`%${args[0]}%`, args[1]];
 pool
-  .query(command)
+  .query(command, values)
   .then((res) => {
     res.rows.forEach((user) => {
       console.log(
